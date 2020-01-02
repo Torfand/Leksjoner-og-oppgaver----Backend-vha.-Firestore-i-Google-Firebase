@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+
+
+        <input type="text" onkeydown="if(event.keyCode==13) add(this)" />
+
+    </div>
+    <div id="todo">Laster data...</div>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-firestore.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDjKD5JL7vZ5Qcitciyn3SNxjYDQFXf9l0",
+            authDomain: "skole-79bbe.firebaseapp.com",
+            databaseURL: "https://skole-79bbe.firebaseio.com",
+            projectId: "skole-79bbe",
+            storageBucket: "skole-79bbe.appspot.com",
+            messagingSenderId: "387307025420",
+            appId: "1:387307025420:web:d50f5ca2b95f99c9f0aa29",
+            measurementId: "G-WR77J522DV"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        var db = firebase.firestore();
+
+        //todoCollection.get().then(
+        let todoCollection = db.collection('todoItems')
+
+        todoCollection.orderBy('todoText').onSnapshot(
+            function (collectionSnapshot) {
+                let html = '<ul>'
+                collectionSnapshot.forEach(
+                    function (todoItemSnapshot) {
+                        let todoItem = todoItemSnapshot.data()
+                        html += '<li>' + todoItem.todoText + ' (' + todoItem.todoDate + ') </li>'
+                    });
+                html += '</ul>'
+                document.getElementById('todo').innerHTML = html;
+
+            });
+
+
+        function add(inputTag) {
+      
+            let todoItem =  {
+                    todoText: inputTag.value,
+                    todoDate: new Date()
+                }
+                todoCollection.add(todoItem);
+        }
+    </script>
+
+
+
+</body>
+
+</html>
