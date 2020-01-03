@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>To-Do</title>
+
+    <style>
+        table,
+        tr,
+        td,
+        th {
+            border: 1px solid gray;
+            border-collapse: collapse;
+
+        }
+
+
+        td,
+        th {
+            padding: 4px;
+
+        }
+
+        th {
+            background-color: crimson;
+            border: 1px solid gray;
+            color: whitesmoke;
+        }
+
+        tr:nth-child(even) {
+            background-color: teal;
+            color: white;
+
+
+
+        }
+    </style>
+
+
+
+</head>
+
+
+<body>
+
+    <table id="taskLists">
+    </table>
+    <br>
+
+    Write Task: <input id="taskinput" type="text">
+    Write Responsible:<input id="nameinput" tupe="text">
+    Deadline : <input id="dateinput" type="date"><button onclick="addTask()">Add Task & Responsible</button>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-firestore.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-analytics.js"></script>
+
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyCtcrrRoh_gb-6vMJtOy3f0WAzHfvvLo_E",
+            authDomain: "todolist-5797c.firebaseapp.com",
+            databaseURL: "https://todolist-5797c.firebaseio.com",
+            projectId: "todolist-5797c",
+            storageBucket: "todolist-5797c.appspot.com",
+            messagingSenderId: "1006821705800",
+            appId: "1:1006821705800:web:b16786f4f0b447b5ab307d",
+            measurementId: "G-DN642MMGWY"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        var db = firebase.firestore();
+
+
+        //model
+        let taskTable = document.getElementById("taskLists")
+        let tasks = db.collection('tasks');
+        let html;
+
+        //view
+        // display();
+        
+            function display() {
+                html = `      
+             <tr>
+            <th>Task</th>
+            <th>Done?</th>
+            <th></th>
+            <th>Responsible</th>
+            <th></th>
+            <th>Deadline</th>
+            <th>Finished-on:</th>
+            </tr> 
+            `;
+             
+            }
+
+        tasks.onSnapshot(
+            function createTasksnRows() {
+                tasks.get().then((document) => {
+                    display();
+
+                    
+                    document.forEach((doc) => {
+                        console.log(doc.data());
+                        const ischecked = doc.data().isDone ? 'checked="checked"' : '';
+
+                       
+
+
+                        html += `
+                     <tr>
+                    <td>${doc.data().description}</td>
+                <td><input type="checkbox" ${ischecked} /></td> 
+                <td>
+                    <button>Remove</button>
+                    <button>Edit</button>
+                    </td>
+                    <td>${doc.data().person}</td>
+                    <td><button>Edit-Responsible</button>
+                        </td>
+                        <td>${doc.data().dateDeadline}</td>
+                        <td>${doc.data().doneDate}</td>
+
+                
+            </tr> `;});
+
+                    taskTable.innerHTML = html;
+                })
+
+            })
+        //controller
+        let inputTask = document.getElementById("taskinput");
+        let inputResponsible = document.getElementById("nameinput");
+        let inputDate = document.getElementById("dateinput")
+        let d = new Date();
+
+
+        function addTask() {
+            if (inputResponsible.value == '' && inputResponsible.value == '' && inputDate.value == ''  
+            ||inputResponsible.value == '' || inputResponsible.value == '' || inputDate.value ==''  ) 
+            { return alert("Fyll inn input boxene") }
+           
+            let newTodoTask = {
+                description: inputTask.value,
+                person: inputResponsible.value,
+                dateDeadline: inputDate.value,
+                isDone : false
+            };
+            tasks.add(newTodoTask)
+            inputTask.value = '';
+            inputResponsible.value = ''
+        }
+        
+        //display();
+
+    </script>
+</body>
+
+</html>
