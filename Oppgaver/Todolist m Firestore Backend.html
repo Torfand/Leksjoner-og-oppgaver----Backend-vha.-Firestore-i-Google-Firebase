@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>To-Do</title>
+    <title>Tao-Do</title>
 
     <style>
         table,
@@ -84,13 +84,17 @@
         //model
         let taskTable = document.getElementById("taskLists")
         let tasks = db.collection('tasks');
+        let tasksRef = db.collection('tasks').doc('hei');
         let html;
+        let i = 0;
+
 
         //view
         // display();
-        
-            function display() {
-                html = `      
+
+        function display() {
+
+            html = `      
              <tr>
             <th>Task</th>
             <th>Done?</th>
@@ -101,20 +105,19 @@
             <th>Finished-on:</th>
             </tr> 
             `;
-             
-            }
+
+        }
 
         tasks.onSnapshot(
             function createTasksnRows() {
                 tasks.get().then((document) => {
                     display();
 
-                    
-                    document.forEach((doc) => {
-                        console.log(doc.data());
-                        const ischecked = doc.data().isDone ? 'checked="checked"' : '';
 
-                       
+                    document.forEach((doc) => {
+                        i++
+                        //  console.log(doc.data());
+                        const ischecked = doc.data().isDone ? 'checked="checked"' : '';
 
 
                         html += `
@@ -122,7 +125,7 @@
                     <td>${doc.data().description}</td>
                 <td><input type="checkbox" ${ischecked} /></td> 
                 <td>
-                    <button>Remove</button>
+                    <button onclick="deleteTask(${i})">Remove</button>
                     <button>Edit</button>
                     </td>
                     <td>${doc.data().person}</td>
@@ -130,9 +133,14 @@
                         </td>
                         <td>${doc.data().dateDeadline}</td>
                         <td>${doc.data().doneDate}</td>
-
+                    
                 
-            </tr> `;});
+            </tr> `;
+
+
+
+
+                    });
 
                     taskTable.innerHTML = html;
                 })
@@ -143,24 +151,46 @@
         let inputResponsible = document.getElementById("nameinput");
         let inputDate = document.getElementById("dateinput")
         let d = new Date();
-
+        //  console.log(d);
 
         function addTask() {
-            if (inputResponsible.value == '' && inputResponsible.value == '' && inputDate.value == ''  
-            ||inputResponsible.value == '' || inputResponsible.value == '' || inputDate.value ==''  ) 
-            { return alert("Fyll inn input boxene") }
-           
+            if (inputResponsible.value == '' && inputResponsible.value == '' && inputDate.value == ''
+                || inputResponsible.value == '' || inputResponsible.value == '' || inputDate.value == '') { return alert("Fyll inn input boxene") };
+
             let newTodoTask = {
                 description: inputTask.value,
                 person: inputResponsible.value,
                 dateDeadline: inputDate.value,
-                isDone : false
+                doneDate: 'No Date',
+                isDone: false
             };
             tasks.add(newTodoTask)
             inputTask.value = '';
             inputResponsible.value = ''
+
         }
-        
+
+
+        console.log(i)
+        function deleteTask() {
+            
+            let taskID = db.collection('tasks').get().then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                 
+                      
+                  })
+                  
+                    db.collection('tasks').doc(`${i}`).delete().then(function () {
+                 })
+
+                
+
+            })
+
+
+        };
+
+
         //display();
 
     </script>
