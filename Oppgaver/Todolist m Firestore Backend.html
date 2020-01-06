@@ -82,11 +82,16 @@
 
 
         //model
+        let docID = [
+
+        ]
+        
+        
         let taskTable = document.getElementById("taskLists")
         let tasks = db.collection('tasks');
         let tasksRef = db.collection('tasks').doc('hei');
         let html;
-        let i = 0;
+
 
 
         //view
@@ -115,17 +120,18 @@
 
 
                     document.forEach((doc) => {
-                        i++
                         //  console.log(doc.data());
                         const ischecked = doc.data().isDone ? 'checked="checked"' : '';
-
-
+                        
+                        docID.push(doc.id)
+                        
                         html += `
-                     <tr>
-                    <td>${doc.data().description}</td>
-                <td><input type="checkbox" ${ischecked} /></td> 
+                        <tr >
+                            <td >${doc.data().description}</td>
+                            <td><input type="checkbox" ${ischecked} /></td> 
+              
                 <td>
-                    <button onclick="deleteTask(${i})">Remove</button>
+                    <button onclick="deleteTask()"></button>
                     <button>Edit</button>
                     </td>
                     <td>${doc.data().person}</td>
@@ -137,9 +143,9 @@
                 
             </tr> `;
 
-
-
-
+ 
+         
+            doc.id += deleteTask(doc.id);
                     });
 
                     taskTable.innerHTML = html;
@@ -171,19 +177,23 @@
         }
 
 
-        console.log(i)
-        function deleteTask() {
+        function selected(id) {
             
+        }
+        //https://softauthor.com/firestore-querying-filtering-data-for-web/
+
+        function deleteTask(id) {
+          console.log(id)
+
             let taskID = db.collection('tasks').get().then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
-                 
-                      
-                  })
-                  
-                    db.collection('tasks').doc(`${i}`).delete().then(function () {
-                 })
+
+                })
 
                 
+                
+                        db.collection('tasks').doc(id).delete().then(function () {
+                        })
 
             })
 
