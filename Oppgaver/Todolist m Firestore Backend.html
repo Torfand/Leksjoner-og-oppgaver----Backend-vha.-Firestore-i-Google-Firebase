@@ -129,11 +129,11 @@
                             html += `
                         <tr >
                             <td>${doc.data().description}</td>
-                            <td><input type="checkbox" ${ischecked} /></td> 
+                            <td><input type="checkbox" onchange="checkMark('${doc.id}')" ${ischecked} /></td> 
                     
                         <td>
                             <button onclick="deleteTask('${doc.id}')">Delete</button>
-                            <button onclick ="editTask('${doc.id}')">Edit</button>
+                            <button>Edit</button>
                             </td>
                             <td>${doc.data().person}</td>
                             <td><button>Edit-Responsible</button>
@@ -141,7 +141,6 @@
                                 <td>${doc.data().dateDeadline}</td>
                                 <td>${doc.data().doneDate}</td>
                                 </tr> ` 
-
 
                            
         })
@@ -156,7 +155,7 @@
         let inputTask = document.getElementById("taskinput");
         let inputResponsible = document.getElementById("nameinput");
         let inputDate = document.getElementById("dateinput")
-        let d = new Date();
+        let d = new Date(year, month, day);
         //  console.log(d);
 
 
@@ -177,6 +176,13 @@
 
         }
 
+        function checkMark(index){
+            db.collection('tasks').doc(index).update({
+                isDone : true,
+                doneDate : d.toLocaleString('nb-no')
+            });
+
+        }
 
 
         function deleteTask(index) {
@@ -184,10 +190,8 @@
             });
         };
 
-        function editTask(index) {
+    
          
-
-    }
 
 
 
