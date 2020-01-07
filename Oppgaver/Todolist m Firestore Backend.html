@@ -24,6 +24,7 @@
 
         }
 
+
         th {
             background-color: crimson;
             border: 1px solid gray;
@@ -82,15 +83,14 @@
 
 
         //model
-        let docID = [
 
-        ]
-        
-        
+
         let taskTable = document.getElementById("taskLists")
         let tasks = db.collection('tasks');
-        let tasksRef = db.collection('tasks').doc('hei');
+        let tasksRef = db.collection('tasks').doc();
         let html;
+        
+
 
 
 
@@ -101,15 +101,15 @@
 
             html = `      
              <tr>
-            <th>Task</th>
-            <th>Done?</th>
-            <th></th>
-            <th>Responsible</th>
-            <th></th>
-            <th>Deadline</th>
-            <th>Finished-on:</th>
-            </tr> 
-            `;
+                <th>Task</th>
+                <th>Done?</th>
+                <th></th>
+                <th>Responsible</th>
+                <th></th>
+                <th>Deadline</th>
+                <th>Finished-on:</th>
+                </tr> 
+                `;
 
         }
 
@@ -120,33 +120,33 @@
 
 
                     document.forEach((doc) => {
-                        //  console.log(doc.data());
-                        const ischecked = doc.data().isDone ? 'checked="checked"' : '';
-                        
-                        docID.push(doc.id)
-                        
-                        html += `
-                        <tr >
-                            <td >${doc.data().description}</td>
-                            <td><input type="checkbox" ${ischecked} /></td> 
-              
-                <td>
-                    <button onclick="deleteTask()"></button>
-                    <button>Edit</button>
-                    </td>
-                    <td>${doc.data().person}</td>
-                    <td><button>Edit-Responsible</button>
-                        </td>
-                        <td>${doc.data().dateDeadline}</td>
-                        <td>${doc.data().doneDate}</td>
-                    
-                
-            </tr> `;
 
- 
-         
-            doc.id += deleteTask(doc.id);
-                    });
+                        const ischecked = doc.data().isDone ? 'checked="checked"' : '';
+
+
+
+                   
+                            html += `
+                        <tr >
+                            <td>${doc.data().description}</td>
+                            <td><input type="checkbox" ${ischecked} /></td> 
+                    
+                        <td>
+                            <button onclick="deleteTask('${doc.id}')">Delete</button>
+                            <button onclick ="editTask('${doc.id}')">Edit</button>
+                            </td>
+                            <td>${doc.data().person}</td>
+                            <td><button>Edit-Responsible</button>
+                                </td>
+                                <td>${doc.data().dateDeadline}</td>
+                                <td>${doc.data().doneDate}</td>
+                                </tr> ` 
+
+
+                           
+        })
+
+
 
                     taskTable.innerHTML = html;
                 })
@@ -158,6 +158,7 @@
         let inputDate = document.getElementById("dateinput")
         let d = new Date();
         //  console.log(d);
+
 
         function addTask() {
             if (inputResponsible.value == '' && inputResponsible.value == '' && inputDate.value == ''
@@ -172,33 +173,24 @@
             };
             tasks.add(newTodoTask)
             inputTask.value = '';
-            inputResponsible.value = ''
+            inputResponsible.value = '';
 
         }
 
 
-        function selected(id) {
-            
-        }
-        //https://softauthor.com/firestore-querying-filtering-data-for-web/
 
-        function deleteTask(id) {
-          console.log(id)
-
-            let taskID = db.collection('tasks').get().then(function (querySnapshot) {
-                querySnapshot.forEach(function (doc) {
-
-                })
-
-                
-                
-                        db.collection('tasks').doc(id).delete().then(function () {
-                        })
-
-            })
-
-
+        function deleteTask(index) {
+            db.collection('tasks').doc(index).delete().then(function () {
+            });
         };
+
+        function editTask(index) {
+         
+
+    }
+
+
+
 
 
         //display();
