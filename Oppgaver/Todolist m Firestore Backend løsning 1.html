@@ -135,7 +135,7 @@
                     
                         <td>
                             <button onclick="deleteTask('${doc.id}')">Delete</button>
-                            <button id='editbtn' onclick ="editMode('${doc.id}')">Edit</button>
+                            <button id='editbtn' onclick ="editTask('${doc.id}')">Edit</button>
                             </td>
                             <td>${doc.data().person}</td>
                                 </td>
@@ -189,7 +189,7 @@
 
 
 
-        function editMode(index) {
+        function editTask(index) {
             if (inputResponsible.value == '' && inputResponsible.value == '' && inputDate.value == ''
                 || inputResponsible.value == '' || inputResponsible.value == '' || inputDate.value == '') { return alert("Fyll inn input boxene for og redigere") };
 
