@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/vinlotterix.css">
+    </link>
+    <script src="js/model.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/people.js"></script>
+    <script src="js/winners.js"></script>
+    <title>Vinlotteri</title>
+</head>
+<body>
+    <div class="page" id="page">
+        <div class="header">
+            <button class="menuBtn" onclick="showAndHideMenu()">☰</button> Vinlotterix🍷
+        </div>
+        <div class="content" id="content"></div>
+        <div class="menu" id="menu">
+            <button class="button fixed" onclick="showPeople()">Personer</button> <br />
+            <button class="buttun fixed" onclick="showDraws()">Vinnere</button> <br />
+        </div>
+    </div>
+
+    <script>
+        showPeople();
+
+        function showAndHideMenu() {
+            document.getElementById('page').classList.toggle('pageWoMenu');
+        }
+
+        
+
+    </script>
+
+</body>
+
+</html>
