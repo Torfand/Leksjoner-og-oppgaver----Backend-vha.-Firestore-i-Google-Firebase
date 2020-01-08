@@ -6,7 +6,7 @@ function showPeople() {
             ${createHTMLchecked(model.person.chooseFromAll)}/></td>
             <td>Personer</td>
             <td>
-            <!--<button class="smallButton" onclick="editPeople()">✎</button>-->
+            <button class="smallButton" onclick="editPeople()">✎</button>-->
             </td>
         </tr>`;
     for (let persons of model.person.list) {
@@ -40,7 +40,7 @@ function showPeople() {
 }
 
 function createHTMLchecked(chosen) {
-    return chosen ? 'checked="checked"' : '';
+    return console.log(chosen),  chosen ? 'checked="checked"' : '';
 
 }
 //controller
