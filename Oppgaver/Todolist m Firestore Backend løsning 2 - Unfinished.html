@@ -48,11 +48,13 @@
 <body>
 
     <table id="taskLists">
+
     </table>
+    
     <br>
 
     Write Task: <input id="taskinput" type="text">
-    Write Responsible:<input id="nameinput" tupe="text">
+    Write Responsible:<input id="nameinput" type="text">
     Deadline : <input id="dateinput" type="date"><button onclick="addTask()">Add Task & Responsible</button>
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
@@ -84,12 +86,12 @@
 
         //model
 
-
+        let edit = false;
         let taskTable = document.getElementById("taskLists")
         let tasks = db.collection('tasks');
         let tasksRef = db.collection('tasks').doc();
         let html;
-        
+
 
 
 
@@ -99,19 +101,23 @@
 
         function display() {
 
-            html = `      
-             <tr>
+            html = `
+            <tr>
                 <th>Task</th>
                 <th>Done?</th>
                 <th></th>
                 <th>Responsible</th>
-                <th></th>
+                
                 <th>Deadline</th>
                 <th>Finished-on:</th>
                 </tr> 
-                `;
+            
+                
+    
+                `;       
 
         }
+
 
         tasks.onSnapshot(
             function createTasksnRows() {
@@ -120,32 +126,22 @@
 
 
                     document.forEach((doc) => {
-
                         const ischecked = doc.data().isDone ? 'checked="checked"' : '';
 
-
-
-                   
-                            html += `
+                        html += `
                         <tr >
                             <td>${doc.data().description}</td>
                             <td><input type="checkbox" onchange="checkMark('${doc.id}')" ${ischecked} /></td> 
                     
                         <td>
                             <button onclick="deleteTask('${doc.id}')">Delete</button>
-                            <button>Edit</button>
+                            <button id='editbtn' onclick ="editMode('${doc.id}')">Edit</button>
                             </td>
                             <td>${doc.data().person}</td>
-                            <td><button>Edit-Responsible</button>
                                 </td>
                                 <td>${doc.data().dateDeadline}</td>
                                 <td>${doc.data().doneDate}</td>
-                                </tr> ` 
-
-                           
-        })
-
-
+                                </tr> `})
 
                     taskTable.innerHTML = html;
                 })
@@ -156,8 +152,6 @@
         let inputResponsible = document.getElementById("nameinput");
         let inputDate = document.getElementById("dateinput")
         let d = new Date();
-        //  console.log(d);
-
 
         function addTask() {
             if (inputResponsible.value == '' && inputResponsible.value == '' && inputDate.value == ''
@@ -170,34 +164,50 @@
                 doneDate: 'No Date',
                 isDone: false
             };
-            tasks.add(newTodoTask)
+            tasks.add(newTodoTask);
             inputTask.value = '';
             inputResponsible.value = '';
+            inputDate.value = '';
 
         }
 
-        function checkMark(index){
-            db.collection('tasks').doc(index).update({
-                isDone : true,
-                doneDate : d.toLocaleString('nb-no')
+        function checkMark(index) {
+            tasks.doc(index).update({
+                isDone: true,
+                doneDate: d.toLocaleString('nb-no')
             });
 
         }
 
 
         function deleteTask(index) {
-            db.collection('tasks').doc(index).delete().then(function () {
+            tasks.doc(index).delete().then(function () {
+                alert('Task Deleted')
             });
         };
 
-    
-         
+
+
+
+        function editMode(index) {
+            if (inputResponsible.value == '' && inputResponsible.value == '' && inputDate.value == ''
+                || inputResponsible.value == '' || inputResponsible.value == '' || inputDate.value == '') { return alert("Fyll inn input boxene for og redigere") };
+
+            tasks.doc(index).update({
+
+                description: inputTask.value,
+                person: inputResponsible.value,
+                dateDeadline: inputDate.value,
+            });
+            inputTask.value = '';
+            inputResponsible.value = '';
+            inputDate.value = '';
+
+        };
 
 
 
 
-
-        //display();
 
     </script>
 </body>
